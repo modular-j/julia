@@ -848,3 +848,10 @@ function similar(t::ImmutableDict)
     end
     return t
 end
+
+_similar_for{P<:Pair}(c::Dict, ::Type{P}, itr, isz::SizeUnknown) = similar(c, P)
+_similar_for{P<:Pair}(c::Dict, ::Type{P}, itr, isz::HasLength) = similar(c, P)
+_similar_for{P<:Pair}(c::Dict, ::Type{P}, itr, isz::HasShape) = similar(c, P)
+_similar_for(c::Associative, T, itr, ::SizeUnknown) = Array{Any}(0)
+_similar_for(c::Associative, T, itr, ::HasLength) = Array{Any}(length(itr))
+_similar_for(c::Associative, T, itr, ::HasShape)  = Array{Any}(size(itr))
